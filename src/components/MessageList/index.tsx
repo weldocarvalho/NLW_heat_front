@@ -1,55 +1,48 @@
-import styles from './styles.module.scss';
+import { useEffect, useState } from 'react';
+import { api } from '../../services/api';
 
+import styles from './styles.module.scss';
 import logoImg from '../../assets/logo.svg';
 
 export function MessageList() {
-	return (
-		<div className={styles.messageListWrapper}>
-			<img src={logoImg} alt="DoWhile 2021" />
+	const [messages, setMessages] = useState<Message[]>([]);
 
-			<ul className={styles.messageList}>
-				<li className={styles.message}>
-					<p className={styles.messageContent}>
-            Não vejo a hora de começar esse evento, com certeza vai ser o melhor
-					</p>
+  type Message = {
+    id: string;
+    text: string;
+    user: {
+      name: string;
+      avatar_url: string;
+    };
+  };
 
-					<div className={styles.messageUser}>
-						<div className={styles.userImage}>
-							<img src="https://github.com/weldocarvalho.png" alt="" />
-						</div>
+  useEffect(() => {
+  	api.get<Message[]>('/messages/latest').then((res) => {
+  		setMessages(res.data);
+  	});
+  }, []);
 
-						<span>Weldo Carvalho</span>
-					</div>
-				</li>
+  return (
+  	<div className={styles.messageListWrapper}>
+  		<img src={logoImg} alt="DoWhile 2021" />
 
-				<li className={styles.message}>
-					<p className={styles.messageContent}>
-            Não vejo a hora de começar esse evento, com certeza vai ser o melhor
-					</p>
+  		<ul className={styles.messageList}>
+  			{messages.map((message) => {
+  				return (
+  					<li key={message.id} className={styles.message}>
+  						<p className={styles.messageContent}>{message.text}</p>
 
-					<div className={styles.messageUser}>
-						<div className={styles.userImage}>
-							<img src="https://github.com/weldocarvalho.png" alt="" />
-						</div>
+  						<div className={styles.messageUser}>
+  							<div className={styles.userImage}>
+  								<img src={message.user.avatar_url} alt={message.user.name} />
+  							</div>
 
-						<span>Weldo Carvalho</span>
-					</div>
-				</li>
-
-				<li className={styles.message}>
-					<p className={styles.messageContent}>
-            Não vejo a hora de começar esse evento, com certeza vai ser o melhor
-					</p>
-
-					<div className={styles.messageUser}>
-						<div className={styles.userImage}>
-							<img src="https://github.com/weldocarvalho.png" alt="" />
-						</div>
-
-						<span>Weldo Carvalho</span>
-					</div>
-				</li>
-			</ul>
-		</div>
-	);
+  							<span>{message.user.name}</span>
+  						</div>
+  					</li>
+  				);
+  			})}
+  		</ul>
+  	</div>
+  );
 }
