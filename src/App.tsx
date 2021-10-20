@@ -1,3 +1,10 @@
+import styles from './App.module.scss';
+import { LoginBox } from './components/LoginBox';
+
 export function App() {
-	return <h1>alive</h1>;
+	return (
+		<main className={styles.contentWrapper}>
+			<LoginBox />
+		</main>
+	);
 }
