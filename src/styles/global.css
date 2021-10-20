@@ -10,3 +10,7 @@ body {
   background: #121214;
   font-size: 62.5%;
 }
+
+p {
+  font-size: 1.3rem;
+}
